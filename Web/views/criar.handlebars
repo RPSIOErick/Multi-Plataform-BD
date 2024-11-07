@@ -1,0 +1,125 @@
+<div class="create-form">
+    <form action="/servico/criar" method="POST">
+        <div class="mb-3">
+            <label for="cli_name" class="form-label">Nome do Cliente</label>
+            <input type="text" class="form-control" id="cli_name" name="cli_name" aria-describedby="cli_name">
+        </div>
+        
+        <div class="mb-3">
+            <label for="initial_date" class="form-label">Data do Pedido</label>
+            <input type="date" class="form-control" id="initial_date" name="initial_date" aria-describedby="initial_date">
+            <div id="initial_date_help" class="form-text">A data é imutável pois pega a data atual.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="final_date" class="form-label">Data Final</label>
+            <input type="date" class="form-control" id="final_date" name="final_date" aria-describedby="final_date">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Preço</label>
+            <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="text" class="form-control" id="price" name="price" aria-describedby="price" placeholder="0,00">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="service_description" class="form-label">Descrição do Serviço</label>
+            <textarea class="form-control" id="service_description" name="service_description" rows="4" placeholder="Descreva o serviço aqui..."></textarea>
+        </div>
+
+        <div class="mb-3">
+            <select class="form-select" aria-label="Default select example" name="status">
+                <option value="Pendente" selected> Pendente </option>
+                <option value="Concluído" disabled> Concluído </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar!</button>
+    </form>
+</div>
+
+<script>
+    // Função para formatar a data no padrão YYYY-MM-DD
+    function getCurrentDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Mês de 0 a 11, por isso +1
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Atribuindo a data atual ao input de data inicial
+    document.getElementById("initial_date").value = getCurrentDate();
+
+    // Formatador de preço para o input de preço
+    document.getElementById("price").addEventListener("input", function (e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    value = (parseFloat(value) / 100).toFixed(2); // Divide por 100 para colocar o ponto decimal
+    e.target.value = value.replace('.', ','); // Converte para o formato "0,00"
+});
+
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+
+    const formData = new FormData(this); // Captura os dados do formulário
+
+    const data = {
+        cli_name: formData.get('cli_name'),
+        initial_date: formData.get('initial_date'),
+        final_date: formData.get('final_date'),
+        price: formData.get('price').replace(',', '.'),
+        service_description: formData.get('service_description'),
+        status: formData.get('status')
+    };
+
+    console.log("Dados do formulário:", data);
+
+    fetch('/servico/criar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Toastify({
+            text: data.message,
+            duration: 3000, // A duração da notificação em milissegundos
+            gravity: "bottom", // Posição vertical
+            position: "right", // Posição horizontal
+            backgroundColor: "#4CAF50", // Cor de fundo
+            newWindow: true, // Faz a notificação aparecer de forma animada
+            close: true, // Exibe o botão de fechar
+            progressBar: true, // Ativa a barra de progresso
+            stopOnFocus: true, // Para a barra de progresso ao focar a notificação
+        }).showToast();
+            setTimeout(() => {
+                window.location.href = "/lista";
+            }, 3500);
+        } else {
+            Toastify({
+                text: data.message,
+                duration: 3000,
+                gravity: "bottom",
+                position: "right",
+                backgroundColor: "#FF0000" // Vermelho para erro
+            }).showToast();
+        }
+    })
+    .catch(error => {
+        console.error("Erro na requisição:", error);
+        Toastify({
+            text: "Erro ao enviar o formulário. Tente novamente.",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#FF0000"
+        }).showToast();
+    });
+});
+
+</script>

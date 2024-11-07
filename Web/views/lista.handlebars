@@ -1,0 +1,73 @@
+<form method="GET" action="/lista" id="options_form">
+    <button type="submit" class="btn btn-primary" name="status" value="">Todos</button>
+    <button type="submit" class="btn btn-warning" name="status" value="Pendente">Pendentes</button>
+    <button type="submit" class="btn btn-success" name="status" value="Concluído">Concluídos</button>
+</form>
+
+    
+{{#if servicos}}
+
+    <table class="table table-light">
+        <thead>
+            <tr id="table-title">
+                <th>Cliente</th>
+                <th>Data de Pedido</th>
+                <th>Data Final</th>
+                <th>Preço</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each servicos}}
+                <tr onclick="window.location.href='/servico/{{this.id}}'">
+                    <th style="font-weight: 400;">{{this.cli_name}}</th>
+                    <td class="format-date" data-date="{{this.initial_date}}">{{this.initial_date}}</td>
+                    <td class="format-date" data-date="{{this.final_date}}">{{this.final_date}}</td>
+                    <td>R${{this.price}}</td>
+                    <td>
+                        {{#if (eq this.status 'Pendente')}}
+                            <a href="#" class="btn btn-danger"> Pendente </a>
+                        {{else if (eq this.status 'Concluído')}}
+                            <a href="#" class="btn btn-success"> Concluído </a>
+                        {{/if}}
+                    </td>
+                </tr>
+            {{/each}}
+        
+    {{else}}
+
+        <div id="welcome_div">
+            <h1 class="title"> Lista de Serviços </h1>
+            <span> Crie algum serviço </span>
+
+            <br>
+
+            <button class="btn btn-light" onclick="window.location.href='/criar'"> Criar serviços! </button>
+        </div>
+
+    {{/if}}
+    </tbody>
+</table>
+
+<script>
+    // Função para formatar a data
+function formatDate(date) {
+    const d = new Date(date);
+    
+    // Ajuste para o fuso horário correto, evitando mudanças automáticas de data
+    d.setMinutes(d.getMinutes() + d.getTimezoneOffset()); 
+
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    
+    return `${day}/${month}/${year}`;
+    }
+
+    // Formatar todas as datas com a classe "format-date"
+    document.querySelectorAll('.format-date').forEach((element) => {
+        const rawDate = element.getAttribute('data-date');
+        const formattedDate = formatDate(rawDate);
+        element.textContent = formattedDate;
+    });
+</script>

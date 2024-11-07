@@ -1,0 +1,177 @@
+<div class="create-form">
+    <form action="/servico/atualizar" method="POST">
+
+        <input type="hidden" name="id" value="{{servico.id}}">
+
+        <div class="mb-3">
+            <label for="cli_name" class="form-label">Nome do Cliente</label>
+            <input type="text" class="form-control" id="cli_name" name="cli_name" aria-describedby="cli_name" value="{{servico.cli_name}}">
+        </div>
+        
+        <div class="mb-3">
+            <label for="initial_date" class="form-label">Data do Pedido</label>
+            <input type="date" class="form-control" id="initial_date" name="initial_date" aria-describedby="initial_date" value="{{servico.initial_date}}">
+        </div>
+
+        <div class="mb-3">
+            <label for="final_date" class="form-label">Data Final</label>
+            <input type="date" class="form-control" id="final_date" name="final_date" aria-describedby="final_date" value="{{servico.final_date}}">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Preço</label>
+            <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="text" class="form-control" id="price" name="price" aria-describedby="price" placeholder="0,00" value="{{servico.price}}">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="service_description" class="form-label">Descrição do Serviço</label>
+            <textarea class="form-control" id="service_description" name="service_description" rows="4" placeholder="Descreva o serviço aqui...">{{servico.service_description}}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <select class="form-select" aria-label="Default select example" name="status">
+                <!-- Preenchendo o status -->
+                <option value="Pendente" {{#if (eq servico.status 'Pendente')}}selected{{/if}}> Pendente </option>
+                <option value="Concluído" {{#if (eq servico.status 'Concluído')}}selected{{/if}}> Concluído </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar!</button>
+    </form>
+
+    <div id="delete-button">
+        <button class="btn btn-danger" onclick="deleteServico('{{servico.id}}')">
+            <img src="https://cdn3.iconfinder.com/data/icons/zeir-minimalism-1/25/delete_clear_trash_remove_bin-512.png" alt="Trash bin">
+        </button>
+    </div>
+</div>
+
+<script>
+
+    // Formatador de preço para o input de preço
+document.getElementById("price").addEventListener("input", function (e) {
+    let value = e.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    value = (parseFloat(value) / 100).toFixed(2); // Divide por 100 para colocar o ponto decimal
+    e.target.value = value.replace('.', ','); // Converte para o formato "0,00"
+});
+
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+
+    const formData = new FormData(this); // Captura os dados do formulário
+
+    const data = {
+        cli_name: formData.get('cli_name'),
+        initial_date: formData.get('initial_date'),
+        final_date: formData.get('final_date'),
+        price: formData.get('price').replace(',', '.'),
+        service_description: formData.get('service_description'),
+        status: formData.get('status')
+    };
+
+    console.log("Dados do formulário:", data);
+
+    const id = formData.get('id');
+
+    fetch('/servico/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Toastify({
+            text: data.message,
+            duration: 3000, // A duração da notificação em milissegundos
+            gravity: "bottom", // Posição vertical
+            position: "right", // Posição horizontal
+            backgroundColor: "#4CAF50", // Cor de fundo
+            newWindow: true, // Faz a notificação aparecer de forma animada
+            close: true, // Exibe o botão de fechar
+            progressBar: true, // Ativa a barra de progresso
+            stopOnFocus: true, // Para a barra de progresso ao focar a notificação
+        }).showToast();
+            setTimeout(() => {
+                window.location.href = "/lista";
+            }, 3500);
+        } else {
+            Toastify({
+                text: data.message,
+                duration: 3000,
+                gravity: "bottom",
+                position: "right",
+                backgroundColor: "#FF0000" // Vermelho para erro
+            }).showToast();
+        }
+    })
+    .catch(error => {
+        console.error("Erro na requisição:", error);
+        Toastify({
+            text: "Erro ao enviar o formulário. Tente novamente.",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#FF0000"
+        }).showToast();
+    });
+});
+
+function deleteServico(id) {
+    if (confirm('Tem certeza que deseja excluir este serviço?')) {
+        fetch('/servico/deletar/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Exibe a notificação de sucesso
+                Toastify({
+                    text: data.message,
+                    duration: 3000, 
+                    gravity: "bottom", 
+                    position: "right", 
+                    backgroundColor: "#4CAF50", 
+                    newWindow: true, 
+                    close: true, 
+                    progressBar: true, 
+                    stopOnFocus: true
+                }).showToast();
+
+                // Redireciona após a notificação
+                setTimeout(() => {
+                    window.location.href = "/lista";
+                }, 3500);
+            } else {
+                // Exibe a notificação de erro
+                Toastify({
+                    text: data.message,
+                    duration: 3000,
+                    gravity: "bottom",
+                    position: "right",
+                    backgroundColor: "#FF0000"
+                }).showToast();
+            }
+        })
+        .catch(error => {
+            console.error("Erro na requisição:", error);
+            Toastify({
+                text: "Erro ao excluir o serviço. Tente novamente.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#FF0000"
+            }).showToast();
+        });
+    }
+}
+
+
+</script>

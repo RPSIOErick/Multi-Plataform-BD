@@ -1,0 +1,20 @@
+.create-form
+{
+    background-color: #FEFEFE;
+
+    margin: 10vh;
+    color: #121212;
+
+    border-radius: 1vh;
+}
+
+form
+{
+    padding: 2vh;
+}
+
+form button
+{
+    margin: 0 auto;
+    width: 100%;
+}

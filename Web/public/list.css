@@ -1,0 +1,46 @@
+table
+{
+    width: 60% !important;
+
+    margin: 10vh auto;
+
+    padding: 2vh;
+
+    text-align: center;
+
+    border-collapse: separate;
+    border-spacing: 0;        
+    border-radius: 2vh;         
+    overflow: hidden; 
+}
+
+#table-title:hover
+{
+    filter: invert(0);
+    cursor: default;
+}
+
+tr:hover
+{
+    cursor: pointer;
+    filter: invert(75%);
+}
+
+#options_form
+{
+    display: flex;
+    width: fit-content;
+    gap: 20px;
+
+    position: absolute;
+    bottom: 5%;
+    left: 40%;
+
+    background-color: #FEFEFE;
+    border-radius: 2vh;
+}
+
+#options_form button
+{
+    box-shadow: 0vh 1vh 1vh #12121234;
+}

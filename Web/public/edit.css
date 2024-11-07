@@ -1,0 +1,12 @@
+#delete-button
+{
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+}
+
+#delete-button img
+{
+    width: 5vh;
+    height: auto;
+}
