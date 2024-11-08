@@ -12,6 +12,12 @@ function isAuthenticated(req, res, next) {
     res.redirect("/login");
 }
 
+// Middleware para garantir que o usuário esteja logado antes de renderizar a navbar corretamente
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;  // Adiciona o usuário logado à view
+    next();
+});
+
 // Configurações de middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,15 +26,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
-
-// Rota padrão para redirecionar conforme a autenticação do usuário
-app.get('/', (req, res) => {
-    if (req.session.user) {
-        res.redirect('/home');
-    } else {
-        res.redirect('/login');
-    }
-});
 
 // Rotas de renderização
 app.get('/login', (req, res) => {
@@ -44,7 +41,7 @@ app.get('/home', isAuthenticated, (req, res) => {
 });
 
 app.get('/criar', isAuthenticated, (req, res) => {
-    res.render('criar');
+    res.render('criar', { user: req.session.user });
 });
 
 app.get('/lista', isAuthenticated, async (req, res) => {
@@ -70,7 +67,7 @@ app.get('/lista', isAuthenticated, async (req, res) => {
         });
     });
 
-    res.render('lista', { servicos, statusFilter });
+    res.render('lista', { servicos, statusFilter, user: req.session.user });
 });
 
 // Rotas de autenticação
@@ -81,12 +78,12 @@ app.post('/login', async (req, res) => {
         const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
         const user = userCredential.user;
         
+        // Salve o displayName do usuário na sessão
         req.session.user = {
             uid: user.uid,
             name: user.displayName,
-            email: user.email  // Adicionando o e-mail
+            email: user.email
         };
-        
         
         res.redirect('/home');
     } catch (err) {
@@ -107,7 +104,8 @@ app.post('/signup', async (req, res) => {
 
         req.session.user = {
             uid: user.uid,
-            name: user.displayName
+            name: user.displayName,
+            email: user.email
         };
 
         res.redirect('/home');
@@ -116,8 +114,19 @@ app.post('/signup', async (req, res) => {
     }
 });
 
+// Rota de logout
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.redirect('/home');
+        }
+        res.clearCookie('connect.sid');
+        res.redirect('/login');
+    });
+});
+
 // Rota para exibir o serviço por ID
-app.get('/servico/:id', isAuthenticated, async (req, res) => {
+app.get('/servico/:id', async (req, res) => {
     const { id } = req.params;
 
     const doc = await db.collection('servicos').doc(id).get();
@@ -140,7 +149,7 @@ app.get('/servico/:id', isAuthenticated, async (req, res) => {
 });
 
 // Rota para atualizar o serviço
-app.put('/servico/:id', isAuthenticated, async (req, res) => {
+app.put('/servico/:id', async (req, res) => {
     const { id } = req.params;
     const { cli_name, initial_date, final_date, price, service_description, status } = req.body;
 
@@ -166,7 +175,7 @@ app.put('/servico/:id', isAuthenticated, async (req, res) => {
 });
 
 // Rota para excluir um serviço
-app.delete('/servico/deletar/:id', isAuthenticated, async (req, res) => {
+app.delete('/servico/deletar/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -185,7 +194,7 @@ app.delete('/servico/deletar/:id', isAuthenticated, async (req, res) => {
 });
 
 // Rota para criar um serviço
-app.post('/servico/criar', isAuthenticated, async (req, res) => {
+app.post('/servico/criar', async (req, res) => {
     const { cli_name, initial_date, final_date, price, service_description, status } = req.body;
 
     if (!cli_name) {
@@ -210,12 +219,13 @@ app.post('/servico/criar', isAuthenticated, async (req, res) => {
 });
 
 app.get('/minha-conta', isAuthenticated, (req, res) => {
+    // Renderiza a página de "Minha Conta" com os dados do usuário
     res.render('minha-conta', { user: req.session.user });
 });
 
 app.post('/minha-conta', isAuthenticated, async (req, res) => {
     const { name, email, password } = req.body;
-    const user = firebaseAuth.currentUser;  // Obtendo o usuário autenticado atual
+    const user = firebaseAuth.currentUser;
 
     try {
         if (name) {
@@ -223,13 +233,13 @@ app.post('/minha-conta', isAuthenticated, async (req, res) => {
             req.session.user.name = name; // Atualiza o nome na sessão
         }
 
-        if (email && email !== user.email) {
-            await user.updateEmail(email);  // Atualiza o e-mail
-            req.session.user.email = email; // Atualiza o e-mail na sessão
+        if (email) {
+            await user.updateEmail(email);
+            req.session.user.email = email; // Atualiza o email na sessão
         }
 
         if (password) {
-            await user.updatePassword(password);  // Atualiza a senha
+            await user.updatePassword(password);
         }
 
         res.render('minha-conta', { user: req.session.user, success: "Dados atualizados com sucesso!" });
@@ -237,7 +247,6 @@ app.post('/minha-conta', isAuthenticated, async (req, res) => {
         res.render('minha-conta', { user: req.session.user, error: error.message });
     }
 });
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
