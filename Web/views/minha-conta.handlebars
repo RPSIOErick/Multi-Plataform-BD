@@ -1,0 +1,35 @@
+<div class="account">
+
+    <h1>Minha Conta</h1>
+
+    {{#if success}}
+        <p style="color: green;">{{success}}</p>
+    {{/if}}
+
+    {{#if error}}
+        <p style="color: red;">{{error}}</p>
+    {{/if}}
+
+    <form action="/minha-conta" method="POST">
+        <label for="name">Nome:</label> <br>
+        <input type="text" name="name" id="name" value="{{user.name}}" required>
+
+        <br>
+        <br>
+
+        <label for="email">Email:</label> <br>
+        <input type="email" name="email" id="email" value="{{user.email}}" required readonly>
+
+        <br>
+        <br>
+
+        <label for="password">Nova Senha:</label> <br>
+        <input type="password" name="password" id="password" placeholder="Deixe em branco para não alterar">
+
+        <br>
+        <br>
+
+        <button type="submit">Atualizar</button>
+    </form>
+
+</div>

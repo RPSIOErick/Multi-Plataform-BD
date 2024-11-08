@@ -1,0 +1,22 @@
+<form action="/singup" method="post" class="login-form">
+
+  <h2> REGISTRAR </h2>
+
+  <input type="text" name="name" placeholder="Nome" required>
+
+  <br>
+
+  <input type="email" name="email" placeholder="E-mail" required>
+
+  <br>
+
+  <input type="password" name="password" placeholder="Senha" required>
+  {{#if error}}
+    <p>{{error}}</p>
+  {{/if}}
+  <button type="submit"> CRIAR CONTA </button>
+
+  <br>
+
+  <span onclick="window.location.href='/'" style="cursor: pointer;"> Já tem uma conta? <strong> Entre agora! </strong> </span>
+</form>
