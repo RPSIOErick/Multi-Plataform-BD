@@ -14,15 +14,3 @@
 
     padding: 2vh;
 }
-
-.account form button
-{
-    width: 100%;
-    border: none;
-    border-radius: 0.5vh;
-    font-size: 2vh;
-
-    background-color: #121212;
-    color: #FEFEFE;
-
-}

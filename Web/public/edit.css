@@ -1,6 +1,6 @@
 #delete-button
 {
-    position: absolute;
+    position: fixed;
     bottom: 5%;
     right: 5%;
 }
@@ -9,4 +9,6 @@
 {
     width: 5vh;
     height: auto;
+
+    filter: invert(1);
 }

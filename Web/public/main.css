@@ -3,25 +3,64 @@
     background-color: #FEFEFE;
     box-shadow: 0vh 0.2vh 1.5vh #b4b4b4;
 
-    font-size: 2vh !important;
+    font-size: 2.5vh !important;
+
+    z-index: 10;
 }
 
 .navbar-brand
 {
-    font-size: 2.5vh !important;
+    font-size: 3.5vh !important;
 }
 
 body
 {
-    background-color: #121212 !important;
+    background-color: #FEFEFE !important;
     font-family: 'Roboto', sans-serif;
-    color: #FEFEFE !important;
+    color: #121212 !important;
 }
 
 .title
 {
     font-size: 3vh;
+    font-weight: medium;
+
+    color: #121212;
+}
+
+.gradient-button
+{
+    margin: 2vh;
+    border: none;
+
+    background-color: #007cff;
+    color: #FEFEFE;
+
     font-weight: bold;
 
-    color: #FEFEFE;
+    border-radius: 1vh;
+
+    padding: 1vh;
+    width: 80%;
+
+    font-size: 2.5vh;
+}
+
+.gradient-button:hover
+{
+    background: linear-gradient(300deg,deepskyblue,blue);
+    background-size: 220% 220%;
+    animation: gradient-animation 5s ease infinite;
+}
+
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+       background-position: 0% 50%;
+    }
 }

@@ -1,22 +1,31 @@
-<form action="/singup" method="post" class="login-form">
+<div class="container text-center" id="login-container">
+  <div class="row">
+    <div class="col">
+      <img src="https://www.1stop.ai/images/login-bg.png">
+    </div>
+    <div class="col">
+      <form action="/signup" method="post" class="login-form">
 
-  <h2> REGISTRAR </h2>
+        <h2> REGISTRAR </h2>
 
-  <input type="text" name="name" placeholder="Nome" required>
+        <input type="text" name="name" placeholder="Nome" required>
 
-  <br>
+        <br>
 
-  <input type="email" name="email" placeholder="E-mail" required>
+        <input type="email" name="email" placeholder="E-mail" required>
 
-  <br>
+        <br>
 
-  <input type="password" name="password" placeholder="Senha" required>
-  {{#if error}}
-    <p>{{error}}</p>
-  {{/if}}
-  <button type="submit"> CRIAR CONTA </button>
+        <input type="password" name="password" placeholder="Senha" required>
+        {{#if error}}
+          <p>{{error}}</p>
+        {{/if}}
+        <button type="submit"> CRIAR CONTA </button>
 
-  <br>
+        <br>
 
-  <span onclick="window.location.href='/'" style="cursor: pointer;"> Já tem uma conta? <strong> Entre agora! </strong> </span>
-</form>
+        <span onclick="window.location.href='/'" style="cursor: pointer;"> Já tem uma conta? <strong> Entre agora! </strong> </span>
+      </form>
+    </div>
+  </div>
+</div>

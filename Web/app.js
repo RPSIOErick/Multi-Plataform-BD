@@ -2,7 +2,13 @@ const { db, app, firebaseAuth } = require('./config/config');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } = require("firebase/auth");
+const { 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword, 
+    updateProfile, 
+    updateEmail, 
+    updatePassword 
+} = require("firebase/auth");
 
 // Middleware para autenticação
 function isAuthenticated(req, res, next) {
@@ -26,6 +32,14 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
+
+app.get('/', (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/login');
+    } else {
+        res.redirect('/home');
+    }
+});
 
 // Rotas de renderização
 app.get('/login', (req, res) => {
@@ -219,7 +233,6 @@ app.post('/servico/criar', async (req, res) => {
 });
 
 app.get('/minha-conta', isAuthenticated, (req, res) => {
-    // Renderiza a página de "Minha Conta" com os dados do usuário
     res.render('minha-conta', { user: req.session.user });
 });
 
@@ -230,16 +243,16 @@ app.post('/minha-conta', isAuthenticated, async (req, res) => {
     try {
         if (name) {
             await updateProfile(user, { displayName: name });
-            req.session.user.name = name; // Atualiza o nome na sessão
+            req.session.user.name = name;
         }
 
         if (email) {
-            await user.updateEmail(email);
-            req.session.user.email = email; // Atualiza o email na sessão
+            await updateEmail(user, email);
+            req.session.user.email = email;
         }
 
         if (password) {
-            await user.updatePassword(password);
+            await updatePassword(user, password);
         }
 
         res.render('minha-conta', { user: req.session.user, success: "Dados atualizados com sucesso!" });

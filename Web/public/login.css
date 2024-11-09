@@ -4,9 +4,8 @@
     text-align: center;
 
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    right: 15%;
+    top: 30%;
 
     background-color: #FEFEFE;
     color: #121212;
@@ -21,21 +20,58 @@
 
     border-radius: 0.5vh;
 
+    padding: 1.5vh;
     padding-left: 1vh;
     width: 80%;
 
     font-size: 2vh;
+
+    transition: all 0.3s ease-in-out;
+}
+
+.login-form input:focus
+{
+    outline: none;
+    transform: scale(1.05);
+}
+
+.login-form input:valid
+{
+    border: 0.2vh solid green;
+    border-radius: 1vh;
 }
 
 .login-form button
 {
     margin: 2vh;
-    border: 0.2vh solid #121212;
+    border: none;
 
-    border-radius: 0.5vh;
+    background-color: #007cff;
+    color: #FEFEFE;
+
+    font-weight: bold;
+
+    border-radius: 1vh;
 
     padding: 1vh;
     width: 80%;
 
-    font-size: 2vh;
+    font-size: 2.5vh;
+}
+
+.login-form button:hover
+{
+    background: linear-gradient(300deg,deepskyblue,blue);
+    background-size: 220% 220%;
+    animation: gradient-animation 5s ease infinite;
+}
+
+#login-container img
+{
+    width: auto;
+    height: 80vh;
+
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
 }
