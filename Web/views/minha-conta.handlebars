@@ -10,7 +10,7 @@
         <p style="color: red;">{{error}}</p>
     {{/if}}
 
-    <form action="/minha-conta" method="POST">
+    <form action="/minha-conta" method="POST" class="account_form">
         <label for="name">Nome:</label> <br>
         <input type="text" name="name" id="name" value="{{user.name}}" required>
 
@@ -30,6 +30,8 @@
         <br>
 
         <button class="gradient-button" type="submit">Atualizar</button>
+
+        <button type="button" class="gradient-red-button" onclick="window.location.href='/logout'"> Sair </button>
     </form>
 
 </div>

@@ -8,9 +8,12 @@
     z-index: 10;
 }
 
-.navbar-brand
+.navbar-brand img
 {
-    font-size: 3.5vh !important;
+    margin-left: 2vh;
+    
+    width: 5vh;
+    height: auto;
 }
 
 body
@@ -41,9 +44,36 @@ body
     border-radius: 1vh;
 
     padding: 1vh;
+    padding-left: 1.5vh;
+    padding-right: 1.5vh;
+    width: fit-content;
+
+    font-size: 2.5vh;
+}
+
+.gradient-red-button
+{
+    margin: 2vh;
+    border: none;
+
+    background-color: #b31818;
+    color: #FEFEFE;
+
+    font-weight: bold;
+
+    border-radius: 1vh;
+
+    padding: 1vh;
     width: 80%;
 
     font-size: 2.5vh;
+}
+
+.gradient-red-button:hover
+{
+    background: linear-gradient(300deg,red,maroon);
+    background-size: 220% 220%;
+    animation: gradient-animation 5s ease infinite;
 }
 
 .gradient-button:hover

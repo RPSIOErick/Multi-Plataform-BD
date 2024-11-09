@@ -14,3 +14,33 @@
 
     padding: 2vh;
 }
+
+.account h1
+{
+    position: relative;
+}
+
+.account_form
+{
+    position: relative;
+    margin: 0 auto;
+
+    width: 100%;
+}
+
+.account_form input
+{
+    position: relative;
+
+    width: 100%;
+    height: 5vh;
+
+    margin: 1vh 0;
+
+    padding: 0 1vw;
+
+    border: 1px solid #121212;
+    border-radius: 0.5vh;
+
+    font-size: 2vh;
+}

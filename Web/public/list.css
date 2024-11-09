@@ -1,29 +1,72 @@
-table
+.card-list
 {
-    width: 60% !important;
+    display: flex;
+    gap: 2vh;
 
-    margin: 10vh auto;
-
-    padding: 2vh;
-
-    text-align: center;
-
-    border-collapse: separate;
-    border-spacing: 0;        
-    border-radius: 2vh;         
-    overflow: hidden; 
+    margin-top: 5vh;
+    margin-left: 5vw;
 }
 
-#table-title:hover
+.card-list .card
 {
-    filter: invert(0);
-    cursor: default;
+    width: 20vw;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background-color: #FEFEFE;
+    border-radius: 2vh;
+
+    box-shadow: 0vh 1vh 1vh #12121234;
 }
 
-tr:hover
+.card
 {
+    width: 20vh;
     cursor: pointer;
-    filter: invert(75%);
+}
+
+.card-header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.pend-h5
+{
+    font-size: 1.7vh;
+    font-weight: medium;
+
+    color: #FEFEFE !important;
+
+    background-color: rgb(255, 0, 0);
+    padding: 0.5vh;
+    padding-left: 1.5vh;
+    padding-right: 1.5vh;
+
+    border-radius: 2vh;
+
+    position: relative;
+    
+}
+
+.conc-h5
+{
+    font-size: 1.7vh;
+    font-weight: medium;
+
+    color: #FEFEFE !important;
+
+    background-color: rgb(12, 158, 68);
+    padding: 0.5vh;
+    padding-left: 1.5vh;
+    padding-right: 1.5vh;
+
+    border-radius: 2vh;
 }
 
 #options_form
@@ -36,7 +79,7 @@ tr:hover
     bottom: 5%;
     left: 40%;
 
-    background-color: #FEFEFE;
+    background-color: #CECECE;
     border-radius: 2vh;
 }
 

@@ -4,36 +4,37 @@
     <button type="submit" class="btn btn-success" name="status" value="Concluído">Concluídos</button>
 </form>
 
+<div class="card-list">
+
     
 {{#if servicos}}
-
-    <table class="table table-light">
-        <thead>
-            <tr id="table-title">
-                <th>Cliente</th>
-                <th>Data de Pedido</th>
-                <th>Data Final</th>
-                <th>Preço</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each servicos}}
-                <tr onclick="window.location.href='/servico/{{this.id}}'">
-                    <th style="font-weight: 400;">{{this.cli_name}}</th>
-                    <td class="format-date" data-date="{{this.initial_date}}">{{this.initial_date}}</td>
-                    <td class="format-date" data-date="{{this.final_date}}">{{this.final_date}}</td>
-                    <td>R${{this.price}}</td>
-                    <td>
-                        {{#if (eq this.status 'Pendente')}}
-                            <a href="#" class="btn btn-danger"> Pendente </a>
-                        {{else if (eq this.status 'Concluído')}}
-                            <a href="#" class="btn btn-success"> Concluído </a>
-                        {{/if}}
-                    </td>
-                </tr>
-            {{/each}}
         
+        {{#each servicos}}
+
+            <div class="card text-bg-light mb-3" onclick="window.location.href='/servico/{{this.id}}'">
+            <div class="card-header"> 
+                {{this.cli_name}}
+
+                {{#if (eq this.status 'Pendente')}}
+                    <h5 class="card-title pend-h5"> Pendente </h5>
+                {{else if (eq this.status 'Concluído')}}
+                    <h5 class="card-title conc-h5"> Concluído </h5>
+                {{/if}}
+
+            </div>
+            <div class="card-body">
+
+                <p class="card-text format-date" data-date-initial="{{this.initial_date}}" data-date-final="{{this.final_date}}">
+                    Pedido em <strong> <span class="initial-date"></span></strong>, concluir até <strong><span class="final-date"></span></strong>
+                </p>
+
+            </div>
+            </div>
+
+        {{/each}}
+
+</div>
+
     {{else}}
 
         <div id="welcome_div">
@@ -42,7 +43,7 @@
 
             <br>
 
-            <button class="btn btn-light" onclick="window.location.href='/criar'"> Criar serviços! </button>
+            <button class="gradient-button" onclick="window.location.href='/criar'"> Criar serviços! </button>
         </div>
 
     {{/if}}
@@ -53,21 +54,29 @@
     // Função para formatar a data
 function formatDate(date) {
     const d = new Date(date);
-    
-    // Ajuste para o fuso horário correto, evitando mudanças automáticas de data
-    d.setMinutes(d.getMinutes() + d.getTimezoneOffset()); 
+    d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
 
     const day = String(d.getDate()).padStart(2, '0');
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = d.getFullYear();
-    
+
     return `${day}/${month}/${year}`;
+}
+
+// Formatar todas as datas com a classe "format-date"
+document.querySelectorAll('.format-date').forEach((element) => {
+    const rawDateInitial = element.getAttribute('data-date-initial');
+    const rawDateFinal = element.getAttribute('data-date-final');
+
+    if (rawDateInitial) {
+        const formattedDateInitial = formatDate(rawDateInitial);
+        element.querySelector('.initial-date').textContent = formattedDateInitial;
     }
 
-    // Formatar todas as datas com a classe "format-date"
-    document.querySelectorAll('.format-date').forEach((element) => {
-        const rawDate = element.getAttribute('data-date');
-        const formattedDate = formatDate(rawDate);
-        element.textContent = formattedDate;
-    });
+    if (rawDateFinal) {
+        const formattedDateFinal = formatDate(rawDateFinal);
+        element.querySelector('.final-date').textContent = formattedDateFinal;
+    }
+});
+
 </script>
