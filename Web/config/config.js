@@ -54,5 +54,5 @@ app.use(session({
 module.exports = {
   db,
   app,
-  firebaseAuth // Exporta o auth do Firebase Client SDK
+  firebaseAuth, // Exporta o auth do Firebase Client SDK
 };

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "794464998142",
+    "project_id": "servicos-e7079",
+    "storage_bucket": "servicos-e7079.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794464998142:android:81441eb549892136c44baf",
+        "android_client_info": {
+          "package_name": "com.example.firebaseauthclient"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIb4stVElLGZF-r9I0Bd9OyYMWbjABUvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

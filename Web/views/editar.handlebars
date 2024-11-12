@@ -64,6 +64,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
     const data = {
         cli_name: formData.get('cli_name'),
+        user_id: formData.get('user_id'),
         initial_date: formData.get('initial_date'),
         final_date: formData.get('final_date'),
         price: formData.get('price').replace(',', '.'),

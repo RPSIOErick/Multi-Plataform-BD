@@ -5,78 +5,71 @@
 </form>
 
 <div class="card-list">
-
-    
-{{#if servicos}}
-        
+    {{#if servicos}}
         {{#each servicos}}
-
             <div class="card text-bg-light mb-3" onclick="window.location.href='/servico/{{this.id}}'">
-            <div class="card-header"> 
-                {{this.cli_name}}
+                <div class="card-header"> 
+                    {{this.cli_name}}
 
-                {{#if (eq this.status 'Pendente')}}
-                    <h5 class="card-title pend-h5"> Pendente </h5>
-                {{else if (eq this.status 'Concluído')}}
-                    <h5 class="card-title conc-h5"> Concluído </h5>
-                {{/if}}
+                    {{#if (eq this.status 'Pendente')}}
+                        <h5 class="card-title pend-h5"> Pendente </h5>
+                    {{else if (eq this.status 'Concluído')}}
+                        <h5 class="card-title conc-h5"> Concluído </h5>
+                    {{/if}}
+                </div>
+                <div class="card-body">
 
+                    {{#if this.initial_date}}
+                        {{#if this.final_date}}
+                            <p class="card-text format-date" data-date-initial="{{this.initial_date}}" data-date-final="{{this.final_date}}">
+                                Pedido em <strong> <span class="initial-date"></span></strong>, concluir até <strong><span class="final-date"></span></strong>
+                            </p>
+                        {{else}}
+                            <p class="card-text"> Não há data final, adicione agora! </p>
+                        {{/if}}
+                    {{else}}
+                        <p class="card-text"> Não há data inicial, adicione agora! </p>
+                    {{/if}}
+
+                </div>
             </div>
-            <div class="card-body">
-
-                <p class="card-text format-date" data-date-initial="{{this.initial_date}}" data-date-final="{{this.final_date}}">
-                    Pedido em <strong> <span class="initial-date"></span></strong>, concluir até <strong><span class="final-date"></span></strong>
-                </p>
-
-            </div>
-            </div>
-
         {{/each}}
-
-</div>
-
     {{else}}
-
         <div id="welcome_div">
             <h1 class="title"> Lista de Serviços </h1>
             <span> Crie algum serviço </span>
-
             <br>
-
             <button class="gradient-button" onclick="window.location.href='/criar'"> Criar serviços! </button>
         </div>
-
     {{/if}}
-    </tbody>
-</table>
+</div>
 
 <script>
     // Função para formatar a data
-function formatDate(date) {
-    const d = new Date(date);
-    d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
+    function formatDate(date) {
+        const d = new Date(date);
+        d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
 
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
 
-    return `${day}/${month}/${year}`;
-}
-
-// Formatar todas as datas com a classe "format-date"
-document.querySelectorAll('.format-date').forEach((element) => {
-    const rawDateInitial = element.getAttribute('data-date-initial');
-    const rawDateFinal = element.getAttribute('data-date-final');
-
-    if (rawDateInitial) {
-        const formattedDateInitial = formatDate(rawDateInitial);
-        element.querySelector('.initial-date').textContent = formattedDateInitial;
+        return `${day}/${month}/${year}`;
     }
 
-    if (rawDateFinal) {
-        const formattedDateFinal = formatDate(rawDateFinal);
-        element.querySelector('.final-date').textContent = formattedDateFinal;
-    }
-});
+    // Formatar todas as datas com a classe "format-date"
+    document.querySelectorAll('.format-date').forEach((element) => {
+        const rawDateInitial = element.getAttribute('data-date-initial');
+        const rawDateFinal = element.getAttribute('data-date-final');
 
+        if (rawDateInitial) {
+            const formattedDateInitial = formatDate(rawDateInitial);
+            element.querySelector('.initial-date').textContent = formattedDateInitial;
+        }
+
+        if (rawDateFinal) {
+            const formattedDateFinal = formatDate(rawDateFinal);
+            element.querySelector('.final-date').textContent = formattedDateFinal;
+        }
+    });
 </script>

@@ -73,6 +73,7 @@ app.get('/lista', isAuthenticated, async (req, res) => {
         servicos.push({
             id: doc.id,
             cli_name: doc.get('client'),
+            user_id: doc.get('user_id'),
             initial_date: doc.get('i_date'),
             final_date: doc.get('f_date'),
             price: doc.get('price'),
@@ -87,6 +88,10 @@ app.get('/lista', isAuthenticated, async (req, res) => {
 // Rotas de autenticação
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
+
+    if(email != "admin@gmail.com") {
+        return res.render('login', { error: "Você não possui permissão pra acessar o sistema." });
+    }
 
     try {
         const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
@@ -152,6 +157,7 @@ app.get('/servico/:id', async (req, res) => {
     const servico = {
         id: doc.id,
         cli_name: doc.get('client'),
+        user_id: doc.get('user_id'),
         initial_date: doc.get('i_date'),
         final_date: doc.get('f_date'),
         price: doc.get('price'),
@@ -165,7 +171,7 @@ app.get('/servico/:id', async (req, res) => {
 // Rota para atualizar o serviço
 app.put('/servico/:id', async (req, res) => {
     const { id } = req.params;
-    const { cli_name, initial_date, final_date, price, service_description, status } = req.body;
+    const { cli_name, user_id, initial_date, final_date, price, service_description, status } = req.body;
 
     if (!cli_name) {
         return res.status(400).json({ success: false, message: "Client name is required." });
@@ -174,6 +180,7 @@ app.put('/servico/:id', async (req, res) => {
     try {
         await db.collection('servicos').doc(id).update({
             client: cli_name,
+            // user_id: user_id,
             i_date: initial_date,
             f_date: final_date,
             price: price,
@@ -209,7 +216,7 @@ app.delete('/servico/deletar/:id', async (req, res) => {
 
 // Rota para criar um serviço
 app.post('/servico/criar', async (req, res) => {
-    const { cli_name, initial_date, final_date, price, service_description, status } = req.body;
+    const { cli_name, user_id, initial_date, final_date, price, service_description, status } = req.body;
 
     if (!cli_name) {
         return res.status(400).json({ success: false, message: "Client name is required." });
@@ -218,6 +225,7 @@ app.post('/servico/criar', async (req, res) => {
     try {
         await db.collection('servicos').add({
             client: cli_name,
+            user_id: user_id,
             i_date: initial_date,
             f_date: final_date,
             price: price,
